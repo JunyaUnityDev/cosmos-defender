@@ -443,6 +443,29 @@
   }
   .retry-btn:active { transform: scale(0.96); }
 
+  /* === GAME OVER 内のボタン群 === */
+  .gameover-buttons {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+    justify-content: center;
+  }
+  .home-btn {
+    background: transparent;
+    color: var(--neon-cyan);
+    border: 2px solid var(--neon-cyan);
+    padding: 16px 28px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--neon-cyan), inset 0 0 4px rgba(0,255,255,0.15);
+    text-shadow: 0 0 6px var(--neon-cyan);
+    transition: all 0.15s;
+  }
+  .home-btn:active { transform: scale(0.96); background: rgba(0, 255, 255, 0.1); }
+
   /* === FLOATING TEXT === */
   .float-text {
     position: absolute; pointer-events: none;
@@ -1232,7 +1255,10 @@
   <div class="my-id-badge" id="goMyIdBadge" style="margin-bottom: 14px;"></div>
   <div class="new-rank" id="newRank">&nbsp;</div>
   <div class="submit-status" id="submitStatus">SUBMITTING...</div>
-  <button class="retry-btn" id="goRetry">RETRY</button>
+  <div class="gameover-buttons">
+    <button class="home-btn" id="goHome">HOME</button>
+    <button class="retry-btn" id="goRetry">RETRY</button>
+  </div>
 </div>
 
 <script>
@@ -2946,6 +2972,15 @@ if (window.fb) {
 
 document.getElementById('goRetry').addEventListener('click', () => {
   setTimeout(() => refreshRanking(), 100);
+});
+
+// HOMEボタン: タイトル画面に戻る
+document.getElementById('goHome').addEventListener('click', () => {
+  gameoverEl.classList.remove('show');
+  startScreenEl.classList.remove('hide');
+  resetGame();
+  refreshRanking();
+  beep(440, 0.05, 'square', 0.04);
 });
 </script>
 </body>
