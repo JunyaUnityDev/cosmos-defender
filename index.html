@@ -934,8 +934,51 @@
   }
 
   /* === START === */
-  .start { position: fixed; inset: 0; background: var(--darker); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 40; padding: 20px; }
+  .start {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* iOS Safari の動的ビューポート対応 */
+    height: 100vh;
+    height: 100dvh;
+    background: var(--darker);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 40;
+    padding: 20px 20px 140px;
+    overflow-y: scroll !important;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y !important;
+  }
+  .start * {
+    touch-action: pan-y;
+  }
+  /* スタート画面の入力欄とボタンはタップ可能 */
+  .start input, .start button {
+    touch-action: manipulation;
+  }
   .start.hide { display: none; }
+  .start.hide ~ .start-button-fixed { display: none; }
+  /* STARTボタンを画面下に固定 */
+  .start-button-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 20px calc(env(safe-area-inset-bottom, 0) + 20px);
+    background: linear-gradient(180deg, transparent 0%, rgba(2,1,10,0.95) 50%, var(--darker) 100%);
+    z-index: 41;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .start-button-fixed .retry-btn {
+    pointer-events: auto;
+  }
   .start-title {
     font-family: 'Press Start 2P', monospace;
     font-size: clamp(20px, 7vw, 36px);
@@ -1239,6 +1282,10 @@
     <div><span class="ico">★</span><span>WAVE毎に強化選択</span></div>
   </div>
   <div class="pro-tip">TIP: 重力で軌道を曲げて<br>遠距離撃破を狙え</div>
+</div>
+
+<!-- START 画面のフッターに固定 START ボタン -->
+<div class="start-button-fixed" id="startButtonFixed">
   <button class="retry-btn" id="startBtn">START</button>
 </div>
 
