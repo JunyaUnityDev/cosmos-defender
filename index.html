@@ -466,6 +466,72 @@
   }
   .home-btn:active { transform: scale(0.96); background: rgba(0, 255, 255, 0.1); }
 
+  /* === COFFEE / TIP BUTTON === */
+  .coffee-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--neon-yellow);
+    border: 2px solid var(--neon-yellow);
+    padding: 12px 22px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 0 8px var(--neon-yellow), inset 0 0 4px rgba(255, 217, 107, 0.15);
+    text-shadow: 0 0 4px var(--neon-yellow);
+    transition: all 0.15s;
+    margin-bottom: 14px;
+    margin-top: 4px;
+  }
+  .coffee-btn:active { transform: scale(0.96); background: rgba(255, 217, 107, 0.15); }
+  .coffee-btn .coffee-ico { font-size: 16px; }
+  .coffee-btn .coffee-en {
+    display: block;
+    font-size: 6px;
+    opacity: 0.7;
+    margin-top: 2px;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 3px var(--neon-cyan);
+    letter-spacing: 1.5px;
+  }
+  .coffee-msg {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--neon-cyan);
+    text-align: center;
+    margin-bottom: 6px;
+    opacity: 0.8;
+    line-height: 1.3;
+  }
+  .coffee-msg .en {
+    display: block;
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 2px;
+  }
+
+  /* === BMC ウィジェット (画面外に追いやる、クリックは可能) === */
+  #bmc-wbtn,
+  div[id^="bmc-wbtn"] {
+    /* 画面外に飛ばす(クリックは可能) */
+    position: fixed !important;
+    left: -9999px !important;
+    bottom: auto !important;
+    top: 0 !important;
+    z-index: -1 !important;
+    pointer-events: auto !important;
+    opacity: 0 !important;
+  }
+  /* オーバーレイ(投げ銭フォーム)は表示 */
+  iframe[src*="buymeacoffee"],
+  div[class*="bmc-modal"],
+  div[id*="bmc-modal"] {
+    z-index: 999999 !important;
+  }
+
   /* === FLOATING TEXT === */
   .float-text {
     position: absolute; pointer-events: none;
@@ -1009,11 +1075,25 @@
     margin-bottom: 20px;
     font-family: 'VT323', monospace;
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.3;
     color: #fff;
   }
-  .start-rules div { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 4px; }
+  .start-rules div { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+  .start-rules div:last-child { margin-bottom: 0; }
   .start-rules .ico { font-size: 14px; min-width: 18px; }
+  .start-rules .txt-jp { display: block; }
+  .start-rules .txt-en {
+    display: block;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--neon-cyan);
+    opacity: 0.6;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .start-rules .rule-text {
+    flex: 1;
+  }
   .pro-tip {
     font-family: 'Press Start 2P', monospace;
     font-size: 7px;
@@ -1268,20 +1348,20 @@
 
   <!-- 名前入力 (常時表示) -->
   <div class="name-input-row" id="nameInputRow">
-    <input id="nameInput" type="text" maxlength="20" placeholder="NAME (省略可)" autocomplete="off">
+    <input id="nameInput" type="text" maxlength="20" placeholder="NAME / 名前 (optional)" autocomplete="off">
   </div>
 
   <div class="start-rules">
-    <div><span class="ico">☀</span><span>太陽を隕石から守れ</span></div>
-    <div><span class="ico">▶</span><span>ドラッグで星を発射</span></div>
-    <div><span class="ico">⚡</span><span>大きい弾ほど消費大</span></div>
-    <div><span class="ico">◎</span><span>遠距離撃破で高得点</span></div>
-    <div><span class="ico">⚔</span><span>5%でCRITICAL(x5)</span></div>
-    <div><span class="ico">🔥</span><span>MAXで長押し→OVERCHARGE</span></div>
-    <div><span class="ico">💎</span><span>金の隕石=JACKPOT</span></div>
-    <div><span class="ico">★</span><span>WAVE毎に強化選択</span></div>
+    <div><span class="ico">☀</span><span class="rule-text"><span class="txt-jp">太陽を隕石から守れ</span><span class="txt-en">PROTECT THE SUN</span></span></div>
+    <div><span class="ico">▶</span><span class="rule-text"><span class="txt-jp">ドラッグで星を発射</span><span class="txt-en">DRAG TO LAUNCH</span></span></div>
+    <div><span class="ico">⚡</span><span class="rule-text"><span class="txt-jp">大きい弾ほど消費大</span><span class="txt-en">BIGGER SHOT COSTS MORE</span></span></div>
+    <div><span class="ico">◎</span><span class="rule-text"><span class="txt-jp">遠距離撃破で高得点</span><span class="txt-en">LONG RANGE = HIGH SCORE</span></span></div>
+    <div><span class="ico">⚔</span><span class="rule-text"><span class="txt-jp">5%でCRITICAL(x5)</span><span class="txt-en">5% CRITICAL HIT (x5)</span></span></div>
+    <div><span class="ico">🔥</span><span class="rule-text"><span class="txt-jp">MAXで長押し→OVERCHARGE</span><span class="txt-en">HOLD AT MAX FOR OVERCHARGE</span></span></div>
+    <div><span class="ico">💎</span><span class="rule-text"><span class="txt-jp">金の隕石=JACKPOT</span><span class="txt-en">GOLD METEOR = JACKPOT</span></span></div>
+    <div><span class="ico">★</span><span class="rule-text"><span class="txt-jp">WAVE毎に強化選択</span><span class="txt-en">UPGRADE EACH WAVE</span></span></div>
   </div>
-  <div class="pro-tip">TIP: 重力で軌道を曲げて<br>遠距離撃破を狙え</div>
+  <div class="pro-tip">TIP: 重力で軌道を曲げて遠距離撃破を狙え<br><span style="opacity:0.7;">USE GRAVITY TO BEND TRAJECTORY</span></div>
 </div>
 
 <!-- START 画面のフッターに固定 START ボタン -->
@@ -1302,6 +1382,21 @@
   <div class="my-id-badge" id="goMyIdBadge" style="margin-bottom: 14px;"></div>
   <div class="new-rank" id="newRank">&nbsp;</div>
   <div class="submit-status" id="submitStatus">SUBMITTING...</div>
+
+  <!-- 投げ銭エリア (3回目以降のGAME OVERで表示) -->
+  <div id="coffeeSection" style="display:none; text-align:center;">
+    <div class="coffee-msg">
+      気に入ってくれて嬉しい!
+      <span class="en">ENJOYING THE GAME?</span>
+    </div>
+    <button class="coffee-btn" id="coffeeBtn" type="button">
+      <span class="coffee-ico">☕</span>
+      <span>BUY ME A COFFEE
+        <span class="coffee-en">SUPPORT THE DEV</span>
+      </span>
+    </button>
+  </div>
+
   <div class="gameover-buttons">
     <button class="home-btn" id="goHome">HOME</button>
     <button class="retry-btn" id="goRetry">RETRY</button>
@@ -3004,6 +3099,17 @@ document.getElementById('startBtn').addEventListener('click', () => {
 const _origGameOver = gameOver;
 gameOver = function() {
   _origGameOver();
+  // ゲームオーバー回数カウント (永続化)
+  let gameoverCount = 0;
+  try {
+    gameoverCount = parseInt(localStorage.getItem('cosmos_gameover_count') || '0', 10) + 1;
+    localStorage.setItem('cosmos_gameover_count', String(gameoverCount));
+  } catch (e) { gameoverCount = 999; /* localStorage不可なら表示優先 */ }
+  // 3回目以降で投げ銭エリア表示
+  const coffeeSection = document.getElementById('coffeeSection');
+  if (coffeeSection) {
+    coffeeSection.style.display = gameoverCount >= 3 ? 'block' : 'none';
+  }
   setTimeout(() => submitScore(), 800);
 };
 
@@ -3029,6 +3135,54 @@ document.getElementById('goHome').addEventListener('click', () => {
   refreshRanking();
   beep(440, 0.05, 'square', 0.04);
 });
+
+// === ☕ コーヒーボタン → BMC オーバーレイを起動 ===
+document.getElementById('coffeeBtn').addEventListener('click', () => {
+  beep(880, 0.08, 'sine', 0.05);
+  // BMCウィジェットのフローティングボタンを探してクリック
+  const selectors = [
+    '#bmc-wbtn',
+    'div[id^="bmc-wbtn"] button',
+    'div[id^="bmc-wbtn"]',
+    'a[href*="buymeacoffee"]',
+    '[data-name="BMC-Widget"]',
+  ];
+  for (const sel of selectors) {
+    const el = document.querySelector(sel);
+    if (el) {
+      try {
+        // 一時的にクリック可能な状態に
+        const orig = {
+          pointerEvents: el.style.pointerEvents,
+          left: el.style.left,
+        };
+        // 画面外にあってもclickは発火するが、念のため
+        el.style.pointerEvents = 'auto';
+        // 複数の発火方法を試す
+        if (typeof el.click === 'function') {
+          el.click();
+        } else {
+          el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        }
+        // 一定時間後に元に戻す(オーバーレイが開いた後)
+        setTimeout(() => {
+          el.style.pointerEvents = orig.pointerEvents;
+        }, 500);
+        return;
+      } catch (e) {
+        console.error('BMC click failed:', e);
+      }
+    }
+  }
+  // ウィジェットが見つからない場合のフォールバック: 新タブ
+  console.warn('BMC widget not found, falling back to new tab');
+  // BMCのembed URLの可能性も試す。デフォルトURLでもユーザーが「Support me」ボタンを押せば投げ銭画面に行く
+  window.open('https://www.buymeacoffee.com/junyasakata', '_blank', 'noopener');
+});
 </script>
+
+<!-- Buy Me a Coffee Widget (常時の浮動ボタンは CSS で非表示) -->
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="junyasakata" data-description="Support me on Buy me a coffee!" data-message="Thank you for playing COSMOS DEFENDER!" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
 </body>
 </html>
