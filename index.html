@@ -1200,8 +1200,8 @@
     <div class="my-id-badge" id="myIdBadge"></div>
   </div>
 
-  <!-- 名前入力 (初回のみ表示) -->
-  <div class="name-input-row" id="nameInputRow" style="display:none;">
+  <!-- 名前入力 (常時表示) -->
+  <div class="name-input-row" id="nameInputRow">
     <input id="nameInput" type="text" maxlength="20" placeholder="NAME (省略可)" autocomplete="off">
   </div>
 
@@ -1229,6 +1229,7 @@
     <div class="row"><div class="k">KILLS</div><div class="v" id="goKills">0</div></div>
     <div class="row"><div class="k">BEST</div><div class="v" id="goBest">0</div></div>
   </div>
+  <div class="my-id-badge" id="goMyIdBadge" style="margin-bottom: 14px;"></div>
   <div class="new-rank" id="newRank">&nbsp;</div>
   <div class="submit-status" id="submitStatus">SUBMITTING...</div>
   <button class="retry-btn" id="goRetry">RETRY</button>
@@ -2754,7 +2755,7 @@ resetGame();
 // === GLOBAL RANKING / PLAYER IDENTITY ===
 // ===================================================
 
-const EMOJI_POOL = ['🌟','⚡','🎯','🔥','💎','🚀','👾','🛸','🌙','☄️','🪐','🌈','🎮','🎲','🎰','💫','✨','🌠','🛡','⚔️','🏆','👑','🎭','🦄','🐉','🦅','🦊','🐺','⭐','🌌'];
+const EMOJI_POOL = ['★','☆','◆','◇','●','○','▲','△','▼','▽','■','□','♠','♣','♥','♦','♪','♫','✦','✧','✩','✪','✫','✬','✭','✮','✯','✰','☼','☀','☁','⚡'];
 
 let playerId = null;
 let lastSubmittedId = null;
@@ -2783,13 +2784,17 @@ function savePlayerId(id) {
 function initPlayerIdentity() {
   let pid = loadPlayerId();
   if (!pid) {
-    pid = { name: '', emoji: generateEmojiId(), firstTime: true };
-    document.getElementById('nameInputRow').style.display = 'flex';
-  } else {
-    document.getElementById('nameInputRow').style.display = 'none';
+    pid = { name: '', emoji: generateEmojiId() };
   }
   playerId = pid;
+  // 入力欄に保存済み名前をセット
+  const inp = document.getElementById('nameInput');
+  if (inp) inp.value = playerId.name || '';
+  // 入力欄は常時表示
+  document.getElementById('nameInputRow').style.display = 'flex';
   updateMyIdBadge();
+  // 初期化時点で1回保存(emojiが固定されるように)
+  savePlayerId(playerId);
 }
 
 function updateMyIdBadge() {
@@ -2848,6 +2853,12 @@ async function refreshRanking() {
 async function submitScore() {
   const statusEl = document.getElementById('submitStatus');
   const newRankEl = document.getElementById('newRank');
+  // ゲームオーバー画面の自分のIDバッジを更新
+  const goBadge = document.getElementById('goMyIdBadge');
+  if (goBadge && playerId) {
+    const safeName = String(playerId.name || 'ANONYMOUS').replace(/[<>&"]/g, '');
+    goBadge.innerHTML = `SUBMITTING AS: <span class="emoji">${playerId.emoji}</span> ${safeName}`;
+  }
   if (!window.fb || !playerId) {
     statusEl.textContent = 'OFFLINE';
     statusEl.className = 'submit-status error';
@@ -2909,8 +2920,8 @@ document.getElementById('startBtn').addEventListener('click', () => {
     if (inp) {
       const v = inp.value.trim().substring(0, 20);
       playerId.name = v;
+      console.log('Saved player name:', v, 'emoji:', playerId.emoji);
     }
-    playerId.firstTime = false;
     savePlayerId(playerId);
     updateMyIdBadge();
   }
